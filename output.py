@@ -8,11 +8,14 @@ def descriptografar_ui():
     load_dotenv()
     chave_privada_pem = os.getenv("CHAVE_PRIVADA").replace("\\n", "\n")
     chave_privada = RSA.import_key(chave_privada_pem)
-    with open("chave.txt", "r", encoding="utf-8") as chave_pass:
-        mensagem_cifrada_hex = chave_pass.read()
-    with open("texto.txt", "r", encoding="utf-8") as texto:
-        mensagem_original_cifrada = texto.read()
-
+    try:
+        with open("chave.txt", "r", encoding="utf-8") as chave_pass:
+            mensagem_cifrada_hex = chave_pass.read()
+        with open("texto.txt", "r", encoding="utf-8") as texto:
+            mensagem_original_cifrada = texto.read()
+    except:
+        pass
+    
     mensagem_descriptografada = ''
     if mensagem_cifrada_hex != '':
         texto_original = decrypt_rsa(chave_privada, mensagem_cifrada_hex)
@@ -28,5 +31,8 @@ def descriptografar_ui():
                 raise ValueError(f"Algoritmo inválido: {algoritmo}")
     else:
         mensagem_descriptografada = decrypt_rsa(chave_privada, mensagem_original_cifrada)
+    if(mensagem_original_cifrada != ''):
+        st.title("Texto criptografado")
+        st.write(mensagem_original_cifrada)
     st.title("Texto descriptografado")
     st.write(mensagem_descriptografada)

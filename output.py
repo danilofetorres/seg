@@ -36,6 +36,7 @@ def descriptografar_ui():
             autenticacao = 1
         except:
             autenticacao = 0
+            pass
     #texto_autenticacao = decrypt_rsa(chave_publica, usuario_autenticacao)
     #antes, separador, depois = texto_autenticacao.partition("Texto escrito por ")
 

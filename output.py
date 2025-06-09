@@ -30,7 +30,7 @@ def descriptografar_ui():
                 raise ValueError("Não foi feita autenticação de usuário.")
         else:
             raise ValueError("Não foi feita autenticação de usuário.")
-    except
+    except:
         raise ValueError("Não foi possível fazer autenticacao de usuario")
     mensagem_descriptografada = ''
     if mensagem_cifrada_hex != '':

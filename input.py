@@ -11,13 +11,20 @@ def gravar_chave(texto):
     f.write(texto)
     f.close()
 
+def autenticar(texto):
+    f = open('autenticacao.txt', 'w')
+    f.write(texto)
+    f.close()
+
 def usuario(texto):
     f = open('user.txt', 'w')
     f.write(texto)
     f.close()
+    
 def criptografar(texto, algoritmo, remetente):
     autenticacao = rsa_autenticacao("Texto escrito por " + remetente)
-    usuario(autenticacao)
+    autenticar(autenticacao)
+    usuario(remetente)
     try:
         cifrado = ''
         chave = ''

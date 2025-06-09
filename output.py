@@ -17,7 +17,9 @@ def descriptografar_ui():
             mensagem_original_cifrada = texto.read()
         with open("user.txt", "r", encoding="utf-8") as usuario:
             usuario_autenticacao = usuario.read()
-    
+    except:
+        pass
+    try:
         texto_autenticacao = decrypt_rsa(chave_publica, usuario_autenticacao)
         antes, separador, depois = texto_autenticacao.partition("Texto escrito por ")
 
@@ -28,27 +30,27 @@ def descriptografar_ui():
                 raise ValueError("Não foi feita autenticação de usuário.")
         else:
             raise ValueError("Não foi feita autenticação de usuário.")
-        mensagem_descriptografada = ''
-        if mensagem_cifrada_hex != '':
-            texto_original = decrypt_rsa(chave_privada, mensagem_cifrada_hex)
-            algoritmo, chave_simetrica = texto_original.split(" ")
-            match algoritmo:
-                case 'DES':
-                    print(len(bytes.fromhex(chave_simetrica)))
-                    print(bytes.fromhex(chave_simetrica))
-                    mensagem_descriptografada = decrypt_des(bytes.fromhex(chave_simetrica), mensagem_original_cifrada)
-                case 'AES':
-                    mensagem_descriptografada = decrypt_aes(bytes.fromhex(chave_simetrica), mensagem_original_cifrada)
-                case _:
-                    raise ValueError(f"Algoritmo inválido: {algoritmo}")
-        else:
-            mensagem_descriptografada = decrypt_rsa(chave_privada, mensagem_original_cifrada)
+    except
+        raise ValueError("Não foi possível fazer autenticacao de usuario")
+    mensagem_descriptografada = ''
+    if mensagem_cifrada_hex != '':
+        texto_original = decrypt_rsa(chave_privada, mensagem_cifrada_hex)
+        algoritmo, chave_simetrica = texto_original.split(" ")
+        match algoritmo:
+            case 'DES':
+                print(len(bytes.fromhex(chave_simetrica)))
+                print(bytes.fromhex(chave_simetrica))
+                mensagem_descriptografada = decrypt_des(bytes.fromhex(chave_simetrica), mensagem_original_cifrada)
+            case 'AES':
+                mensagem_descriptografada = decrypt_aes(bytes.fromhex(chave_simetrica), mensagem_original_cifrada)
+            case _:
+                raise ValueError(f"Algoritmo inválido: {algoritmo}")
+    else:
+        mensagem_descriptografada = decrypt_rsa(chave_privada, mensagem_original_cifrada)
 
-        st.write(texto_autenticacao)
-        if(mensagem_original_cifrada != ''):
-            st.title("Texto criptografado")
-            st.write(mensagem_original_cifrada)
-        st.title("Texto descriptografado")
-        st.write(mensagem_descriptografada)
-    except:
-        pass
+    st.write(texto_autenticacao)
+    if(mensagem_original_cifrada != ''):
+        st.title("Texto criptografado")
+        st.write(mensagem_original_cifrada)
+    st.title("Texto descriptografado")
+    st.write(mensagem_descriptografada)

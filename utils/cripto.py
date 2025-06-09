@@ -2,6 +2,8 @@ from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP, AES, DES
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad, unpad
+from Crypto.Signature import pkcs1_15
+from Crypto.Hash import SHA256
 import os
 from dotenv import load_dotenv 
 from binascii import unhexlify
@@ -52,6 +54,7 @@ def rsa_autenticacao(plain_text):
     load_dotenv()
     chave_privada_pem = os.getenv("CHAVE_PRIVADA").replace("\\n", "\n")
     chave_privada = RSA.import_key(chave_privada_pem)
-    cifra = PKCS1_OAEP.new(chave_privada)
-    mensagem_cifrada = cifra.encrypt(plain_text.encode())
-    return mensagem_cifrada.hex()
+    h = SHA256.new(plain_text.encode())
+    # Cria a assinatura
+    assinatura = pkcs1_15.new(chave_privada).sign(h)
+    return assinatura.hex()

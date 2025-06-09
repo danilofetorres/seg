@@ -47,3 +47,11 @@ def decrypt_rsa(chave, plain_text):
     mensagem_cifrada_bytes = bytes.fromhex(plain_text)
     mensagem_decifrada = decifra.decrypt(mensagem_cifrada_bytes)
     return mensagem_decifrada.decode('utf-8')
+
+def rsa_autenticacao(plain_text):
+    load_dotenv()
+    chave_privada_pem = os.getenv("CHAVE_PRIVADA").replace("\\n", "\n")
+    chave_privada = RSA.import_key(chave_privada_pem)
+    cifra = PKCS1_OAEP.new(chave_privada)
+    mensagem_cifrada = cifra.encrypt(plain_text.encode())
+    return mensagem_cifrada.hex()
